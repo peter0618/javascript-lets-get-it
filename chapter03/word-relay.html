@@ -16,12 +16,30 @@
     const $word = document.querySelector('#word');
     const $order = document.querySelector('#order');
     const countOfMembers = parseInt(prompt('몇 명이 참가하나요?'), 10);
-    
     let order = parseInt($order.textContent);
-
-    document.querySelector('#inputBtn').addEventListener('click', onClick);
+    
+    if (countOfMembers) { // prompt 로 입력받은 문자를 정수로 변환할 수 없다면 NaN 이 리턴되는데, NaN 은 falsy 값임. (사실, 더 정확하게 제한하려면 0보다 큰 정수인지도 확인해야 함.)
+      document.querySelector('#inputBtn').addEventListener('click', onClick);
+      
+      // Execute a function when the user presses a key on the keyboard
+      $input.addEventListener("keypress", function(event) {
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Trigger the button element with a click
+          document.querySelector('#inputBtn').click();
+        }
+      });
+    } else {
+      alert('참가할 인원을 정확한 숫자로 입력해야 합니다.');
+    }
 
     function onClick() {
+      if ($input.value.length !== 3) {
+        alert('입력하신 글자는 3글자가 아닙니다! 3글자로 다시 입력해주세요!');
+        return;
+      }
       const originWord = $word.textContent;
       // 제시어가 없거나(첫번째 참가자) 제시어의 마지막 글자와 입력된 단어의 첫번째 글자가 같은 경우
       if (originWord === '' || isEnteredWordCorrect()) {
@@ -30,7 +48,7 @@
         alert('Game Over!');
       }
     }
-    
+
     function isEnteredWordCorrect() {
       return $word.textContent.charAt($word.textContent.length-1) === $input.value.charAt(0);
     }
@@ -41,23 +59,11 @@
       $input.focus();
       updateOrder();
     }
-    
+
     function updateOrder() {
       order = order < countOfMembers ? order + 1 : 1;
       $order.textContent = order;
     }
-
-    
-    // Execute a function when the user presses a key on the keyboard
-    $input.addEventListener("keypress", function(event) {
-      // If the user presses the "Enter" key on the keyboard
-      if (event.key === "Enter") {
-        // Cancel the default action, if needed
-        event.preventDefault();
-        // Trigger the button element with a click
-        document.querySelector('#inputBtn').click();
-      }
-    });
     
     // const $buttons = document.querySelectorAll('.btn'); // $buttons -> 유사 배열. 배열과 비슷하게 생겼지만, 배열이 제공해주는 모든 기능을 다 사용할 수는 없다.
   </script>
