@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>끝말잇기</title>
+  <style></style>
+</head>
+<body>
+  <div><span id="order">1</span>번째 참가자</div>
+  <div>제시어: <span id="word"></span></div>
+  <input type="text">
+  <button id="inputBtn">입력</button>
+  <script>
+    const $input = document.querySelector('input');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+    const countOfMembers = parseInt(prompt('몇 명이 참가하나요?'), 10);
+    
+    let order = parseInt($order.textContent);
+
+    document.querySelector('#inputBtn').addEventListener('click', onClick);
+
+    function onClick() {
+      const originWord = $word.textContent;
+      // 제시어가 없거나(첫번째 참가자) 제시어의 마지막 글자와 입력된 단어의 첫번째 글자가 같은 경우
+      if (originWord === '' || isEnteredWordCorrect()) {
+        renderNextTurn();
+      } else {
+        alert('Game Over!');
+      }
+    }
+    
+    function isEnteredWordCorrect() {
+      return $word.textContent.charAt($word.textContent.length-1) === $input.value.charAt(0);
+    }
+
+    function renderNextTurn() {
+      $word.textContent = $input.value;
+      $input.value = '';
+      $input.focus();
+      updateOrder();
+    }
+    
+    function updateOrder() {
+      order = order < countOfMembers ? order + 1 : 1;
+      $order.textContent = order;
+    }
+
+    
+    // Execute a function when the user presses a key on the keyboard
+    $input.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.querySelector('#inputBtn').click();
+      }
+    });
+    
+    // const $buttons = document.querySelectorAll('.btn'); // $buttons -> 유사 배열. 배열과 비슷하게 생겼지만, 배열이 제공해주는 모든 기능을 다 사용할 수는 없다.
+  </script>
+</body>
+</html>
